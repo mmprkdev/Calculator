@@ -21,16 +21,15 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
         }
 
+        // Generic function for all number button clicks. 
         private void button_click(object sender, EventArgs e)
         {
+            // Clear the text box after an operator button is pushed (+, -, *, /),
+            // textBox1.Text == "0" is meant to clear the default zero value.
             if ((textBox1.Text == "0") || (isOperationPerformed))
             {
                 result = Double.Parse(textBox1.Text);
@@ -39,20 +38,30 @@ namespace WindowsFormsApp1
 
             isOperationPerformed = false;
             Button button = (Button)sender;
+            // Check for decimal button press.
             if (button.Text == ".")
             {
+                // Ensures that multiple decimals are not allowed.
                 if (!textBox1.Text.Contains("."))
                     textBox1.Text += button.Text;
             }
             else
+                // Otherwise, append the button text.
                 textBox1.Text += button.Text;
 
         }
 
+        // Generic function for all operator button clicks.
         private void operator_click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
 
+            // Allows the operator buttons to perform the equal button's
+            // function when operator buttons are pressed multiple times.
+            //
+            // E.g., 1+1+... 1 and 1 will be added together and two will
+            // be displayed in the text box when the plus button
+            // is pressed for the second time. 
             if (result != 0)
             {
                 equ.PerformClick();
@@ -68,24 +77,33 @@ namespace WindowsFormsApp1
             }
         }
 
+        // Function performed when the "C" (clear) button is pressed.
         private void button17_Click(object sender, EventArgs e)
         {
             textBox1.Text = "0";
         }
 
+        // Function performed when the "CE" (clear entry) button is pressed.
         private void button20_Click(object sender, EventArgs e)
         {
             textBox1.Text = "0";
             result = 0;
         }
 
+        // Equal button function.
+        //
+        // NOTE: After changing the names of the buttons through the properties
+        // window in design mode, the original names still remain in this script.
+        // Manually changing the name of the function to "equ" causes a compiler
+        // error.
         private void button12_Click(object sender, EventArgs e)
         {
+            // Depending on what operator button was pressed, compute the equation
+            // and assign it to the text box text variable.
             switch (operationPerformed)
             {
                 case "+":
                     textBox1.Text = (result + Double.Parse(textBox1.Text)).ToString();
-                    result = Double.Parse(textBox1.Text);
                     break;
                 case "-":
                     textBox1.Text = (result - Double.Parse(textBox1.Text)).ToString();
@@ -102,11 +120,13 @@ namespace WindowsFormsApp1
             operationPerformed = "";
         }
 
+        // Handles the possitive/negitive modifier button.
         private void button19_Click(object sender, EventArgs e)
         {
             textBox1.Text = (Double.Parse(textBox1.Text) * (-1)).ToString();
         }
 
+        // Checks for any keypresses and performs the corrisponding function.
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
             switch (e.KeyChar.ToString())
